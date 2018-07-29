@@ -1,0 +1,6 @@
+8bfcd22353c3a57fee561ad86ee2a56b  reconf
+bae35014bedc89937c87629b38128ec4  control_writes_base.py
+2641f2fd77860c82e5b6b7cf95872eaf  configure.ac
+0bfcb17b45fab5fcf6e864ac49d0cc02  Makefile.am
+99421b20c48f60f60a4ee231d11153a5  Makefile.am.ide
+7c914dcebac4ce3e662f8fa072dc54af  control_writes.py

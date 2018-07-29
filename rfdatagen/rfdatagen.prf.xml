@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties PUBLIC "-//JTRS//DTD SCA V2.2.2 PRF//EN" "properties.dtd">
+<properties>
+  <simple id="sample_rate" mode="readwrite" type="double">
+    <value>100000</value>
+    <kind kindtype="property"/>
+    <action type="external"/>
+  </simple>
+  <simple id="center_frequency" mode="readwrite" type="double">
+    <value>1000000</value>
+    <kind kindtype="property"/>
+    <action type="external"/>
+  </simple>
+  <simple id="complex_data" mode="readwrite" type="boolean">
+    <value>false</value>
+    <kind kindtype="property"/>
+    <action type="external"/>
+  </simple>
+</properties>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties PUBLIC "-//JTRS//DTD SCA V2.2.2 PRF//EN" "properties.dtd">
+<properties>
+  <simple id="ageoff" mode="readwrite" type="float">
+    <description>seconds</description>
+    <value>600</value>
+    <kind kindtype="property"/>
+    <action type="external"/>
+  </simple>
+  <struct id="cut_request" mode="readwrite">
+    <simple id="cut_request::time_begin" name="time_begin" type="double"/>
+    <simple id="cut_request::time_end" name="time_end" type="double"/>
+    <simple id="cut_request::freq_begin" name="freq_begin" type="double"/>
+    <simple id="cut_request::freq_end" name="freq_end" type="double"/>
+    <simple id="cut_request::request_id" name="request_id" type="string"/>
+    <configurationkind kindtype="message"/>
+  </struct>
+  <struct id="cut_response" mode="readwrite">
+    <simple id="cut_response::request_id" name="request_id" type="string"/>
+    <simple id="cut_response::file_location" name="file_location" type="string"/>
+    <configurationkind kindtype="message"/>
+  </struct>
+  <struct id="file_io_message" mode="readwrite">
+    <description>The structure representing a file IO message.</description>
+    <simple id="file_io_message::file_operation" name="file_operation" type="string">
+      <description>The message can indicate either an open or close event.</description>
+      <value>OPEN</value>
+      <enumerations>
+        <enumeration label="OPEN" value="OPEN"/>
+        <enumeration label="CLOSE" value="CLOSE"/>
+      </enumerations>
+    </simple>
+    <simple id="file_io_message::stream_id" name="stream_id" type="string">
+      <description>The message can indicate a stream to be associated with the event.</description>
+    </simple>
+    <simple id="file_io_message::filename" name="filename" type="string">
+      <description>The message can indicate a filename to be associated with the event.</description>
+    </simple>
+    <configurationkind kindtype="message"/>
+  </struct>
+</properties>

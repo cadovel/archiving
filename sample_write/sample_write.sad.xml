@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE softwareassembly PUBLIC "-//JTRS//DTD SCA V2.2.2 SAD//EN" "softwareassembly.dtd">
+<softwareassembly id="DCE:fa6e9563-7645-4dff-a841-32b4536b28fc" name="sample_write">
+  <componentfiles>
+    <componentfile id="rfdatagen_8e93dd38-f374-42d4-a77f-19c3867f0fce" type="SPD">
+      <localfile name="/components/rfdatagen/rfdatagen.spd.xml"/>
+    </componentfile>
+  </componentfiles>
+  <partitioning>
+    <componentplacement>
+      <componentfileref refid="rfdatagen_8e93dd38-f374-42d4-a77f-19c3867f0fce"/>
+      <componentinstantiation id="rfdatagen_1" startorder="0">
+        <usagename>rfdatagen_1</usagename>
+        <findcomponent>
+          <namingservice name="rfdatagen_1"/>
+        </findcomponent>
+      </componentinstantiation>
+    </componentplacement>
+  </partitioning>
+  <assemblycontroller>
+    <componentinstantiationref refid="rfdatagen_1"/>
+  </assemblycontroller>
+  <connections/>
+  <externalports>
+    <port externalname="signal_out">
+      <usesidentifier>dataFloat</usesidentifier>
+      <componentinstantiationref refid="rfdatagen_1"/>
+    </port>
+  </externalports>
+</softwareassembly>

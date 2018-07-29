@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE softwareassembly PUBLIC "-//JTRS//DTD SCA V2.2.2 SAD//EN" "softwareassembly.dtd">
+<softwareassembly id="DCE:4dbd3c7e-e1de-4463-8a97-6b64f01e2f1f" name="archiver">
+  <componentfiles>
+    <componentfile id="FileWriter_f73b3884-a215-48d9-bb29-8cab15df5e86" type="SPD">
+      <localfile name="/components/rh/FileWriter/FileWriter.spd.xml"/>
+    </componentfile>
+    <componentfile id="FileReader_dec33bd3-6a7c-4eb8-a6e7-bc9ac018b129" type="SPD">
+      <localfile name="/components/rh/FileReader/FileReader.spd.xml"/>
+    </componentfile>
+    <componentfile id="TuneFilterDecimate_efb20537-d45a-4b66-952a-ccf7e3a47a20" type="SPD">
+      <localfile name="/components/rh/TuneFilterDecimate/TuneFilterDecimate.spd.xml"/>
+    </componentfile>
+    <componentfile id="control_writes_ad80ecc2-5e47-45c6-a0fe-2e6f2935c33b" type="SPD">
+      <localfile name="/components/control_writes/control_writes.spd.xml"/>
+    </componentfile>
+    <componentfile id="splitter_5beb1949-6015-49fb-b594-189adfcfd8d7" type="SPD">
+      <localfile name="/components/splitter/splitter.spd.xml"/>
+    </componentfile>
+  </componentfiles>
+  <partitioning>
+    <componentplacement>
+      <componentfileref refid="FileWriter_f73b3884-a215-48d9-bb29-8cab15df5e86"/>
+      <componentinstantiation id="FileWriter_1" startorder="1">
+        <usagename>FileWriter_1</usagename>
+        <findcomponent>
+          <namingservice name="FileWriter_1"/>
+        </findcomponent>
+      </componentinstantiation>
+    </componentplacement>
+    <componentplacement>
+      <componentfileref refid="FileWriter_f73b3884-a215-48d9-bb29-8cab15df5e86"/>
+      <componentinstantiation id="FileWriter_2" startorder="2">
+        <usagename>FileWriter_2</usagename>
+        <findcomponent>
+          <namingservice name="FileWriter_2"/>
+        </findcomponent>
+      </componentinstantiation>
+    </componentplacement>
+    <componentplacement>
+      <componentfileref refid="FileReader_dec33bd3-6a7c-4eb8-a6e7-bc9ac018b129"/>
+      <componentinstantiation id="FileReader_1" startorder="4">
+        <usagename>FileReader_1</usagename>
+        <componentproperties>
+          <structref refid="advanced_properties">
+            <simpleref refid="throttle_rate" value="0"/>
+          </structref>
+        </componentproperties>
+        <findcomponent>
+          <namingservice name="FileReader_1"/>
+        </findcomponent>
+      </componentinstantiation>
+    </componentplacement>
+    <componentplacement>
+      <componentfileref refid="TuneFilterDecimate_efb20537-d45a-4b66-952a-ccf7e3a47a20"/>
+      <componentinstantiation id="TuneFilterDecimate_1" startorder="5">
+        <usagename>TuneFilterDecimate_1</usagename>
+        <findcomponent>
+          <namingservice name="TuneFilterDecimate_1"/>
+        </findcomponent>
+      </componentinstantiation>
+    </componentplacement>
+    <componentplacement>
+      <componentfileref refid="control_writes_ad80ecc2-5e47-45c6-a0fe-2e6f2935c33b"/>
+      <componentinstantiation id="control_writes_1" startorder="0">
+        <usagename>control_writes_1</usagename>
+        <findcomponent>
+          <namingservice name="control_writes_1"/>
+        </findcomponent>
+      </componentinstantiation>
+    </componentplacement>
+    <componentplacement>
+      <componentfileref refid="FileWriter_f73b3884-a215-48d9-bb29-8cab15df5e86"/>
+      <componentinstantiation id="FileWriter_3" startorder="3">
+        <usagename>FileWriter_3</usagename>
+        <componentproperties>
+          <simpleref refid="file_format" value="BLUEFILE"/>
+        </componentproperties>
+        <findcomponent>
+          <namingservice name="FileWriter_3"/>
+        </findcomponent>
+      </componentinstantiation>
+    </componentplacement>
+    <componentplacement>
+      <componentfileref refid="splitter_5beb1949-6015-49fb-b594-189adfcfd8d7"/>
+      <componentinstantiation id="splitter_1" startorder="6">
+        <usagename>splitter_1</usagename>
+        <findcomponent>
+          <namingservice name="splitter_1"/>
+        </findcomponent>
+      </componentinstantiation>
+    </componentplacement>
+  </partitioning>
+  <assemblycontroller>
+    <componentinstantiationref refid="control_writes_1"/>
+  </assemblycontroller>
+  <connections>
+    <connectinterface id="connection_1">
+      <usesport>
+        <usesidentifier>dataFloat_out</usesidentifier>
+        <componentinstantiationref refid="FileReader_1"/>
+      </usesport>
+      <providesport>
+        <providesidentifier>dataFloat_in</providesidentifier>
+        <componentinstantiationref refid="TuneFilterDecimate_1"/>
+      </providesport>
+    </connectinterface>
+    <connectinterface id="connection_2">
+      <usesport>
+        <usesidentifier>dataFloat_out</usesidentifier>
+        <componentinstantiationref refid="TuneFilterDecimate_1"/>
+      </usesport>
+      <providesport>
+        <providesidentifier>dataFloat_in</providesidentifier>
+        <componentinstantiationref refid="FileWriter_3"/>
+      </providesport>
+    </connectinterface>
+    <connectinterface id="connection_3">
+      <usesport>
+        <usesidentifier>dataFloat_1</usesidentifier>
+        <componentinstantiationref refid="splitter_1"/>
+      </usesport>
+      <providesport>
+        <providesidentifier>dataFloat_in</providesidentifier>
+        <componentinstantiationref refid="FileWriter_1"/>
+      </providesport>
+    </connectinterface>
+    <connectinterface id="connection_4">
+      <usesport>
+        <usesidentifier>dataFloat_2</usesidentifier>
+        <componentinstantiationref refid="splitter_1"/>
+      </usesport>
+      <providesport>
+        <providesidentifier>dataFloat_in</providesidentifier>
+        <componentinstantiationref refid="FileWriter_2"/>
+      </providesport>
+    </connectinterface>
+    <connectinterface id="connection_5">
+      <usesport>
+        <usesidentifier>MessageEvent_out</usesidentifier>
+        <componentinstantiationref refid="FileWriter_3"/>
+      </usesport>
+      <providesport>
+        <providesidentifier>file_io_status</providesidentifier>
+        <componentinstantiationref refid="control_writes_1"/>
+      </providesport>
+    </connectinterface>
+  </connections>
+  <externalports>
+    <port externalname="signal_in">
+      <providesidentifier>dataFloat</providesidentifier>
+      <componentinstantiationref refid="splitter_1"/>
+    </port>
+    <port>
+      <providesidentifier>request</providesidentifier>
+      <componentinstantiationref refid="control_writes_1"/>
+    </port>
+    <port>
+      <providesidentifier>response</providesidentifier>
+      <componentinstantiationref refid="control_writes_1"/>
+    </port>
+  </externalports>
+</softwareassembly>
