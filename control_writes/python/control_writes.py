@@ -11,6 +11,7 @@ from omniORB import any
 import os, time
 
 from control_writes_base import *
+from pycparser.c_ast import Compound
 
 class control_writes_i(control_writes_base):
     """<DESCRIPTION GOES HERE>"""
@@ -197,6 +198,7 @@ class control_writes_i(control_writes_base):
         fw_2_recording = self.FileWriter_2.componentObject.query([is_enabled])[0].value._v
         fw_3_recording = self.FileWriter_3.componentObject.query([is_enabled])[0].value._v
         now = time.time()
+       
         if now > self.one_start and now < self.one_end:
             if not fw_1_recording:
                 self.FileWriter_1.componentObject.configure([enabled_true])
@@ -271,18 +273,23 @@ class control_writes_i(control_writes_base):
         request_id = new_value.request_id
         timestring = time.asctime(time.gmtime(new_value.time_begin)).split(' ')
         month = timestring[1]
-        day = timestring[2]
+        if timestring[2] == '':
+            day = '0'+timestring[3]
+        else:
+            day = timestring[2]
         year = timestring[-1]
         begin_seconds = self.gm_to_seconds(time.gmtime(new_value.time_begin))
         begin_compounddate = day+month+year
 
         timestring = time.asctime(time.gmtime(new_value.time_end)).split(' ')
         month = timestring[1]
-        day = timestring[2]
+        if timestring[2] == '':
+            day = '0'+timestring[3]
+        else:
+            day = timestring[2]
         year = timestring[-1]
         end_seconds = self.gm_to_seconds(time.gmtime(new_value.time_end))
         end_compounddate = day+month+year
-
         filelist = os.listdir(self.basedir)
         for _file in filelist:
             fields = _file.split('.')
@@ -290,6 +297,8 @@ class control_writes_i(control_writes_base):
                 continue
             try:
                 format = fields[-1]
+                if format == "inProgress":
+                    continue
                 samplerate = float(fields[-2])
                 filesize = os.stat(self.basedir+'/'+_file).st_size
                 complexity = fields[-3]
@@ -303,7 +312,6 @@ class control_writes_i(control_writes_base):
                     continue
                 if end_seconds > filetime_in_seconds + (filesize/(samplerate*4)):
                     continue
-                
                 self.TFD.DesiredOutputRate = new_value.freq_end - new_value.freq_begin
                 self.TFD.FilterBW = new_value.freq_end - new_value.freq_begin
                 new_center_freq = (new_value.freq_end + new_value.freq_begin)/2.0
@@ -315,14 +323,22 @@ class control_writes_i(control_writes_base):
                 uri = CF.DataType(id='destination_uri', value=any.to_any('sca:///data/'+newfilename))
                 enabled_true = CF.DataType(id='recording_enabled', value=any.to_any(True))
                 self.FileWriter_3.componentObject.configure([uri, enabled_true])
-
                 source_uri = CF.DataType(id='source_uri', value=any.to_any('sca:///data/'+_file))
                 sample_rate = CF.DataType(id='sample_rate', value=any.to_any(str(samplerate)))
-                file_format = CF.DataType(id='file_format', value=any.to_any("FLOAT"))
+                file_format = CF.DataType(id='file_format', value=any.to_any("COMPLEX_FLOAT"))
                 xdelta = CF.DataType(id='xdelta', value=any.to_any(1/samplerate))
                 sri = CF.DataType(id='default_sri', value=any.to_any([xdelta]))
                 center_frequency = CF.DataType(id='center_frequency', value=any.to_any(str(center_freq)))
-                self.FileReader_1.componentObject.configure([source_uri, sri, center_frequency, sample_rate, file_format])
+            
+                start = begin_seconds - filetime_in_seconds
+                end = end_seconds - filetime_in_seconds
+                print 'start: ',start,' end: ',end, ' difference: ',end-start
+                enable_time_filtering = CF.DataType(id='enable_time_filtering', value=any.to_any(True))
+                start_time = CF.DataType(id='start_time', value=any.to_any(start))
+                stop_time = CF.DataType(id='stop_time', value=any.to_any(end))
+                adv_props = CF.DataType(id='advanced_properties', value=any.to_any([enable_time_filtering, start_time, stop_time]))
+                self.FileReader_1.componentObject.configure([adv_props, source_uri, sri, center_frequency, sample_rate, file_format])
+                
                 playback_state = CF.DataType(id='playback_state', value=any.to_any('PLAY'))
                 self.FileReader_1.componentObject.configure([playback_state])
                 break
